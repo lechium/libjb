@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, APFSErrorCode) {
 @end
 
 @interface APFSHelper: NSObject
-+ (NSArray *)returnForProcess:(NSString *)call;
++ (NSString *)returnForProcess:(NSString *)format, ...;
 + (NSDictionary *)mountedDevices;
 + (NSArray *)deviceArray;
 + (NSString *)prefixPath;

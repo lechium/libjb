@@ -1,6 +1,7 @@
 #import "APFSHelper.h"
 #include <sys/stat.h>
 #import "iokit.h"
+#import "NSTask.h"
 
 int APFSVolumeDelete(const char *path);
 
@@ -92,26 +93,37 @@ int APFSVolumeDelete(const char *path);
     return false;
 }
 
-+ (NSArray *)returnForProcess:(NSString *)call {
-    if (call==nil)
-        return 0;
-    char line[200];
-    //DLog(@"\nRunning process: %@\n", call);
-    FILE* fp = popen([call UTF8String], "r");
-    NSMutableArray *lines = [[NSMutableArray alloc]init];
-    if (fp) {
-        while (fgets(line, sizeof line, fp)){
-            NSString *s = [NSString stringWithCString:line encoding:NSUTF8StringEncoding];
-            s = [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            [lines addObject:s];
-        }
++ (NSString *)returnForProcess:(NSString *)format, ... {
+    if (format==nil)
+        return nil;
+    va_list args;
+    va_start(args, format);
+    NSString *process = [[NSString alloc] initWithFormat:format arguments:args];
+    va_end(args);
+    NSArray *rawProcessArgumentArray = [process componentsSeparatedByString:@" "];
+    NSString *taskBinary = [rawProcessArgumentArray firstObject];
+    NSArray *taskArguments = [rawProcessArgumentArray subarrayWithRange:NSMakeRange(1, rawProcessArgumentArray.count-1)];
+    NSTask *task = [[NSTask alloc] init];
+    NSPipe *pipe = [[NSPipe alloc] init];
+    NSFileHandle *handle = [pipe fileHandleForReading];
+    [task setLaunchPath:taskBinary];
+    [task setArguments:taskArguments];
+    [task setStandardOutput:pipe];
+    [task setStandardError:pipe];
+    [task launch];
+    
+    NSData *outData = nil;
+    NSString *temp = nil;
+    while((outData = [handle readDataToEndOfFile]) && [outData length]) {
+        temp = [[NSString alloc] initWithData:outData encoding:NSASCIIStringEncoding];
     }
-    pclose(fp);
-    return lines;
+    [handle closeFile];
+    task = nil;
+    return [temp stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 + (NSString *)mountDetails {
-    return [[self returnForProcess:@"/sbin/mount"]componentsJoinedByString:@"\n"];
+    return [self returnForProcess:@"/sbin/mount"];
 }
 
 + (NSDictionary *)mountedDevices {
@@ -178,8 +190,15 @@ int APFSVolumeDelete(const char *path);
     return deviceArray;
 }
 
++ (BOOL)etcWritable {
+    return [[NSFileManager defaultManager] isWritableFileAtPath:@"/etc"];
+}
+
 + (NSString *)prefixConfigPath {
-    return @"/etc/cr_prefix";
+    if ([self etcWritable]){
+        return @"/etc/cr_prefix";
+    }
+    return [[self prefixPath] stringByAppendingPathComponent:@"etc/cr_prefix"];
 }
 
 + (int)refreshPrefix {
