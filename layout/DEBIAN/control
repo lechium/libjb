@@ -1,0 +1,9 @@
+Package: libjb
+Name: libjb
+Version: 1.0
+Architecture: appletvos-arm64
+Description: Library that shares the current prefix path for rootless jailbreaks 
+Maintainer: Kevin Bradley
+Author: Kevin Bradley
+Section: System
+Tag: role::developer
