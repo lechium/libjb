@@ -4,6 +4,9 @@
 @implementation JBManager
 
 + (NSString *)jbPrefix {
+    if (kCFCoreFoundationVersionNumber < 1854){
+        return @"";
+    }
     return [APFSHelper smartPrefixPath];
 }
 

@@ -4,16 +4,18 @@
 
 int APFSVolumeDelete(const char *path);
 
+//([@./\w-]*)\son\s([./\w]*)\s\(([\w]*)
+
 @implementation NSString (APFS)
-- (NSDictionary *)deviceDictionaryFromRegex:(NSString *)pattern  {
+
+- (NSDictionary *)deviceDictionary  {
     NSMutableDictionary *devices = [NSMutableDictionary new];
     NSError *error = NULL;
     NSRange range = NSMakeRange(0, self.length);
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive | NSRegularExpressionAnchorsMatchLines error:&error];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([@./\\w-]*)\\son\\s([./\\w]*)\\s\\(([\\w]*)" options:NSRegularExpressionCaseInsensitive | NSRegularExpressionAnchorsMatchLines error:&error];
     NSArray *matches = [regex matchesInString:self options:NSMatchingReportProgress range:range];
     for (NSTextCheckingResult *entry in matches) {
         NSMutableDictionary *dict = [NSMutableDictionary new];
-        //NSMutableArray *itemArray = [NSMutableArray new];
         for (NSInteger i = 1; i < entry.numberOfRanges; i++) {
             NSRange range = [entry rangeAtIndex:i];
             if (range.location != NSNotFound){
@@ -53,6 +55,9 @@ int APFSVolumeDelete(const char *path);
                 break;
             case APFSErrorCodeBadEntitlements:
                 DLog(@"\n\nMissing entitlements to delete APFS volumes\n\n");
+                break;
+            case APFSErrorCodeNone:
+                DLog(@"\n\nVolume deleted successfully!\n\n");
                 break;
             default:
                 DLog(@"\n\nAn unknown error has occured, error code: %ld\n\n", (long)deleteProgress);
@@ -112,7 +117,7 @@ int APFSVolumeDelete(const char *path);
 + (NSDictionary *)mountedDevices {
     NSString *mount = [self mountDetails];
     //NSLog(@"mount: %@", mount);
-    return [mount deviceDictionaryFromRegex:@"([@./\\w-]*)\\son\\s([./\\w]*)\\s\\(([\\w]*)"]; //([@./\w-]*)\son\s([./\w]*)\s\(([\w]*)
+    return [mount deviceDictionary];
 }
 
 + (NSArray *)deviceArray {

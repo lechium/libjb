@@ -11,11 +11,12 @@ typedef NS_ENUM(NSInteger, APFSErrorCode) {
     APFSErrorCodeInvalidVolume = 49154,
     APFSErrorCodeVolumeBusy = 49874,
     APFSErrorCodeBadEntitlements = 49890,
+    APFSErrorCodeNone = 0,
     APFSErrorCodeUnknown
 };
 
 @interface NSString (APFS)
-- (NSDictionary *)deviceDictionaryFromRegex:(NSString *)pattern;
+- (NSDictionary *)deviceDictionary;
 @end
 
 @interface APFSHelper: NSObject
