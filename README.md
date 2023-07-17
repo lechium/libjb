@@ -1,2 +1,2 @@
 # libjb
-a central location to query for the 'prefix' for a 'rootless' jailbreak
+a central location to generate & query for the 'prefix' for a 'rootless' jailbreak. also includes some basic apfs functionality that originated from [apfsutil](https://github.com/lechium/apfsutil). This functionality migrated here due to the fact that this library shouldn't just passively read the prefix data from somewhere, it should actually determine and cache the data as well as report it.
