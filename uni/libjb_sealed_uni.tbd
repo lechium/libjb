@@ -1,0 +1,51 @@
+--- !tapi-tbd
+tbd-version:           4
+targets:               [ arm64-ios, arm64e-ios, arm64-tvos ]
+flags:                 [ flat_namespace, not_app_extension_safe ]
+install-name:          /fs/jb/usr/lib/libjb.dylib
+current-version:       0
+compatibility-version: 0
+exports:
+  - targets:              [ arm64-ios, arm64e-ios, arm64-tvos ]
+    objc-classes:         [ APFSHelper, JBManager ]
+undefineds:
+  - targets:              [ arm64-ios, arm64e-ios, arm64-tvos ]
+    symbols:              [ _APFSVolumeDelete, _CFShow, _CFStringGetCStringPtr,
+                            _IOIteratorNext, _IOMasterPort, _IOObjectRelease,
+                            _IORegistryEntryCreateCFProperties,
+                            _IORegistryEntryGetPath,
+                            _IOServiceGetMatchingServices, _IOServiceMatching,
+                            __DefaultRuneLocale,
+                            ___CFConstantStringClassReference, ___assert_rtn,
+                            ___stack_chk_fail, ___stack_chk_guard,
+                            __dyld_register_func_for_add_image,
+                            __objc_empty_cache, __objc_empty_vtable, _abort,
+                            _asprintf, _bzero, _calloc, _class_addMethod,
+                            _class_addProperty, _class_addProtocol,
+                            _class_getInstanceMethod, _class_getInstanceVariable,
+                            _class_getName, _class_getSuperclass,
+                            _class_isMetaClass, _class_replaceMethod, _free,
+                            _getchar, _hash_create, _hash_search,
+                            _kCFCoreFoundationVersionNumber,
+                            _mach_port_deallocate, _mach_task_self_, _malloc,
+                            _memcpy, _method_setImplementation, _objc_alloc,
+                            _objc_allocateClassPair,
+                            _objc_autoreleaseReturnValue,
+                            _objc_constructInstance,
+                            _objc_copyClassNamesForImage,
+                            _objc_enumerationMutation, _objc_getClass,
+                            _objc_getMetaClass, _objc_getProtocol,
+                            _objc_getRequiredClass, _objc_initializeClassPair,
+                            _objc_lookUpClass, _objc_msgSend,
+                            _objc_registerClassPair, _objc_release, _objc_retain,
+                            _objc_retainAutorelease,
+                            _objc_retainAutoreleasedReturnValue,
+                            _object_getClass, _object_getIndexedIvars,
+                            _object_getIvar, _printf, _property_copyAttributeList,
+                            _protocol_getMethodDescription, _protocol_getName,
+                            _pthread_mutex_lock, _pthread_mutex_unlock,
+                            _sel_getUid, _strcmp, _strlen, _strncmp, dyld_stub_binder ]
+    objc-classes:         [ NSCharacterSet, NSFileManager, NSMutableArray,
+                            NSMutableDictionary, NSNumber, NSObject, NSPipe,
+                            NSPredicate, NSRegularExpression, NSString, NSTask ]
+...

@@ -204,7 +204,7 @@ int APFSVolumeDelete(const char *path);
 + (int)refreshPrefix {
     NSString *prefixPath = [self prefixPath];
     if (prefixPath) {
-        DLog(@"Found prefix path: %@", prefixPath);
+        //DLog(@"Found prefix path: %@", prefixPath);
         return [prefixPath writeToFile:[self prefixConfigPath] atomically:true encoding:NSUTF8StringEncoding error:nil];
     }
     return -1;

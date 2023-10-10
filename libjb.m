@@ -5,7 +5,7 @@
 
 + (NSString *)jbPrefix {
     if (kCFCoreFoundationVersionNumber < 1854){
-        return @"";
+        return @"/";
     }
     return [APFSHelper smartPrefixPath];
 }
